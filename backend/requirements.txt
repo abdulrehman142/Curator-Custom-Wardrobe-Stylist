@@ -1,0 +1,33 @@
+fastapi
+uvicorn[standard]
+python-multipart
+pillow<12
+numpy<2.2
+opencv-python-headless
+sqlalchemy
+databases
+ultralytics
+requests
+scikit-learn<1.7
+selenium
+beautifulsoup4
+torch
+torchvision
+mlflow
+pydantic
+email-validator
+# Data/versioning + pipelines
+dvc
+# Fixed dependency versions for compatibility
+botocore>=1.40.59
+boto3>=1.40.59
+s3transfer>=0.14.0
+pyasn1>=0.5.0
+python-jose>=3.5.0
+aiobotocore>=2.13.0
+# Optional: dlib for advanced face shape detection
+# Install with: pip install dlib
+# Note: dlib requires cmake and may need additional setup
+# The face analyzer will work without dlib using basic face shape detection
+# Note: Selenium requires ChromeDriver. Install from: https://chromedriver.chromium.org/
+# Or use: pip install webdriver-manager (alternative approach)

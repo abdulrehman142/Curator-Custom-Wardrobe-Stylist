@@ -1,0 +1,16 @@
+preprocess:
+  input_dir: uploads
+  output_dir: data/preprocessed
+  image_size: 224
+
+train_siamese:
+  experiment_name: wardrobe-compatibility
+  batch_size: 8
+  num_epochs: 2
+  lr: 0.0005
+  embedding_dim: 128
+
+evaluate:
+  num_pairs: 32
+  batch_size: 8
+

@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.git
+.dvc/cache
+node_modules/
+uploads/
+mlruns/
+

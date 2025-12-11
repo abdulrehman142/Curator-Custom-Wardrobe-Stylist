@@ -1,0 +1,6 @@
+experiment_name: wardrobe-compatibility
+registry_model_name: wardrobe-compatibility
+tracking_uri: ${MLFLOW_TRACKING_URI:-mlruns}
+default_stage: Production
+artifact_subdir: artifacts
+

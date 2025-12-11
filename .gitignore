@@ -1,0 +1,34 @@
+# Ignore environment files and local secrets
+.env
+.env.local
+frontend/.env.local
+backend/.env
+**/*.env
+# DVC
+backend/.dvc/
+backend/*.dvc
+backend/data/
+backend/artifacts/
+backend/reports/
+
+# Large data/model assets tracked by DVC
+backend/uploads/
+backend/models/
+backend/weights/
+backend/wardrobe.db
+
+# MLflow local stores
+backend/mlruns/
+mlruns/
+backend/mlflow.db
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Environment / editor
+.env
+.venv/
+.idea/
+.vscode/
+

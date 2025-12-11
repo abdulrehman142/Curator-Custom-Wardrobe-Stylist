@@ -1,0 +1,30 @@
+stages
+
+  download
+    cmd python srcdownload_data.py
+    deps
+      - srcdownload_data.py
+    outs
+      - dataraw
+
+  preprocess
+    cmd python srcpreprocess.py
+    deps
+      - srcpreprocess.py
+      - dataraw
+    outs
+      - dataprocessed
+
+  train
+    cmd python srctrain.py
+    deps
+      - srctrain.py
+      - srcmodel.py
+      - srcdataset.py
+      - dataprocessed
+      - params.yaml
+    outs
+      - models
+    metrics
+      - metrics.json
+          cache false

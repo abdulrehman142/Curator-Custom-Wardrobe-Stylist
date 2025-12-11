@@ -1,0 +1,79 @@
+@import url('https://fonts.googleapis.com/css2?family=Jersey+10&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-jersey: 'Jersey 10', sans-serif;
+  --font-ibm-plex-mono: 'IBM Plex Mono', monospace;
+  
+  --color-primary: #231212;
+  --color-primary-hover: #422727;
+  --color-light-bg: #FFFFFF;
+  --color-dark-bg: #000000;
+  --color-text-light: #000000;
+  --color-text-dark: #FFFFFF;
+  --color-border: #231212;
+  --color-neutral-light: #CCCCCC;
+  --color-neutral-medium: #E5E5E5;
+  --color-neutral-soft: #F3F3F3;
+}
+
+.dark {
+  --color-light-bg: #000000;
+  --color-dark-bg: #000000;
+  --color-text-light: #FFFFFF;
+  --color-text-dark: #FFFFFF;
+  --color-border: #FFFFFF;
+}
+
+@layer base {
+  body {
+    @apply bg-white dark:bg-black text-black dark:text-white;
+    font-family: var(--font-ibm-plex-mono);
+    transition: background-color 250ms, color 250ms;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-jersey);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-[#231212] text-white border-2 border-[#231212] rounded-md px-3 py-2 md:px-4 md:py-3;
+    @apply transition-all duration-smooth;
+    @apply hover:bg-[#422727] hover:border-[#422727];
+    @apply dark:bg-black dark:text-white dark:border-white;
+    @apply dark:hover:bg-gray-900 dark:hover:border-white;
+  }
+  
+  .btn-secondary {
+    @apply bg-transparent text-[#231212] border-2 border-[#231212] rounded-md px-3 py-2 md:px-4 md:py-3;
+    @apply transition-all duration-smooth;
+    @apply hover:bg-[#231212] hover:text-white;
+    @apply dark:bg-black dark:text-white dark:border-white;
+    @apply dark:hover:bg-white dark:hover:text-black;
+  }
+  
+  .card {
+    @apply bg-white dark:bg-black border-2 border-[#231212] dark:border-white rounded-md shadow-lg;
+    @apply p-4 md:p-6;
+  }
+  
+  .input-field {
+    @apply border-2 border-[#231212] dark:border-white rounded-md px-3 py-2;
+    @apply bg-white dark:bg-black text-black dark:text-white;
+    @apply focus:outline-none focus:ring-2 focus:ring-[#231212] dark:focus:ring-white;
+    @apply transition-all duration-smooth;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+

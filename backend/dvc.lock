@@ -1,0 +1,24 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python -m ml.preprocess --params-file params.yaml
+    deps:
+    - path: ml/preprocess.py
+      hash: md5
+      md5: 2d96ab987e192386cf20ea2f8d92a79e
+      size: 2092
+    - path: params.yaml
+      hash: md5
+      md5: ba3c3a2ce3914438b7a72d1b01f3a9ae
+      size: 267
+    - path: uploads
+      hash: md5
+      md5: 4b98590427c3d23813037e1e1b231649.dir
+      size: 1101199
+      nfiles: 22
+    outs:
+    - path: data/preprocessed
+      hash: md5
+      md5: 5bae4d40e7424b7236e9a6b51d3e2205.dir
+      size: 743208
+      nfiles: 22

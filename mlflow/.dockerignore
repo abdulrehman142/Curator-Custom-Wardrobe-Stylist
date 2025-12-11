@@ -1,0 +1,6 @@
+.git
+.dvc/cache
+__pycache__/
+*.pyc
+*.log
+

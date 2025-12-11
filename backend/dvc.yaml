@@ -1,0 +1,29 @@
+stages:
+  preprocess:
+    cmd: python -m ml.preprocess --params-file params.yaml
+    deps:
+      - ml/preprocess.py
+      - params.yaml
+      - uploads
+    outs:
+      - data/preprocessed
+
+  train_siamese:
+    cmd: python -m ml.siamese_train --params-file params.yaml --output-path artifacts/compatibility/compat_mobilenetv2.pth
+    deps:
+      - ml/siamese_train.py
+      - params.yaml
+      - data/preprocessed
+    outs:
+      - artifacts/compatibility/compat_mobilenetv2.pth
+
+  evaluate:
+    cmd: python -m ml.evaluate --params-file params.yaml --checkpoint models/compat_mobilenetv2.pth --report reports/eval.json
+    deps:
+      - ml/evaluate.py
+      - params.yaml
+      - data/preprocessed
+      - models/compat_mobilenetv2.pth
+    metrics:
+      - reports/eval.json
+
