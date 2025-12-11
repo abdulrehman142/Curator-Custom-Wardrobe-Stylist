@@ -1,60 +1,85 @@
-# Wardrobe AI – MLOps (MLflow + DVC)
+# Wardrobe AI – FastAPI + Next.js + MLflow + DVC
 
-This repo powers the Wardrobe AI app (FastAPI backend + Next.js frontend) with
-MLflow tracking/registry and DVC data/pipeline reproducibility.
+Production-minded wardrobe recommendation stack with secure secret handling, experiment tracking (MLflow), and data/versioned pipelines (DVC).
 
-## Quick start
+## What’s inside
+- **Backend**: FastAPI + YOLO classifier + Siamese compatibility model
+- **Frontend**: Next.js (App Router) + Tailwind
+- **MLOps**: MLflow tracking/registry, DVC pipelines, MinIO-compatible artifact store via Compose
 
-- Backend API: `cd backend && uvicorn app.main:app --reload --port 8000`
-- Frontend: `cd frontend && npm install && npm run dev`
+## Prereqs
+- Python 3.10+
+- Node 18+
+- Docker + Docker Compose (optional, recommended)
 
-## MLflow (tracking + registry)
+## Environment variables (no secrets in repo)
+Set these locally (shell) or in non-committed `.env` files:
 
-- Start local server: `cd backend && ./mlflow_server.sh` (or `mlflow_server.bat`)
-- UI: http://localhost:5000
-- Configure client: `export MLFLOW_TRACKING_URI=http://localhost:5000`
-- Model registry name: `wardrobe-compatibility`
-- API hot reload: `POST /reload-model` (FastAPI) to pull the latest registry model
-  with fallback to `backend/models/compat_mobilenetv2.pth`.
-
-## DVC (data + pipelines)
-
-- Init (already done): `dvc init --no-scm`
-- Data tracked: `backend/uploads`, `backend/models`, `backend/weights`, `backend/wardrobe.db`
-- Pipelines (in `backend/dvc.yaml`):
-  - `preprocess`: resize wardrobe images → `backend/data/preprocessed`
-  - `train_siamese`: trains compatibility model, logs to MLflow, updates registry
-  - `evaluate`: evaluates checkpoint, logs metrics to MLflow → `backend/reports/eval.json`
-- Reproduce all stages: `./run_pipeline.sh` (or `run_pipeline.bat` on Windows) – runs `dvc repro` from backend
-
-## Key scripts
-
-- `backend/ml/preprocess.py` – cleans & resizes images
-- `backend/ml/siamese_train.py` – trains + logs compatibility model to MLflow & registry
-- `backend/ml/evaluate.py` – evaluates model and logs metrics/artifacts
-- `backend/mlflow_server.(sh|bat)` – local MLflow server helper
-- `run_pipeline.sh` – pipeline wrapper (DVC + registry update)
-
-## Environment variables
-
-- `MLFLOW_TRACKING_URI` (default: `backend/mlruns`)
+**Backend**
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+- `AWS_REGION` (default: `eu-north-1`)
+- `S3_BUCKET` (default: `my-app-uploads-mlops`)
+- `OPENWEATHER_API_KEY`
+- `MLFLOW_TRACKING_URI` (default: `backend/mlruns` or `http://mlflow:5000` in Compose)
 - `MLFLOW_MODEL_NAME` (default: `wardrobe-compatibility`)
 - `MLFLOW_MODEL_STAGE` (default: `Production`)
 - `YOLO_CLASSIFIER_PATH` (default: `backend/weights/best.pt`)
+
+**Frontend**
 - `NEXT_PUBLIC_API_URL` (default: `http://localhost:8000`)
+- `NEXT_PUBLIC_OPENWEATHER_KEY` (frontend-safe OpenWeather key)
 
-## Running with Docker Compose
+> Secrets must live in environment only. `.env` / `.env.local` are git-ignored.
 
-- Build all images:
-  ```
-  docker compose build
-  ```
-- Start the stack:
-  ```
-  docker compose up
-  ```
-- Services:
-  - Frontend: http://localhost:3000
-  - Backend: http://localhost:8000
-  - MLflow UI: http://localhost:5000
+## Local dev
+Backend:
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn app.main:app --reload --port 8000
+```
+
+Frontend:
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+## Docker Compose (full stack)
+```bash
+docker compose up --build
+```
+Services:
+- Frontend: http://localhost:3000
+- Backend: http://localhost:8000
+- MLflow UI: http://localhost:5000
+- MinIO: http://localhost:9000
+
+## MLflow
+- Registry model: `wardrobe-compatibility`
+- Hot-reload model: `POST /reload-model` (falls back to local checkpoint)
+
+## DVC pipelines (backend/dvc.yaml)
+- `preprocess`: resize wardrobe images → `backend/data/preprocessed`
+- `train_siamese`: train compatibility model, log to MLflow, update registry
+- `evaluate`: evaluate checkpoint, log metrics → `backend/reports/eval.json`
+- Reproduce: `cd backend && dvc repro` (or `./run_pipeline.sh`)
+
+## Data & models
+- YOLO weights: `backend/weights/best.pt` (not tracked by git)
+- Siamese model checkpoint: `backend/models/compat_mobilenetv2.pth` (tracked via DVC)
+- User uploads: `backend/uploads` (tracked via DVC)
+
+## Safety checklist before pushing
+- Ensure `.env`, `.env.local`, `backend/.env`, `frontend/.env.local` stay untracked (already in `.gitignore`).
+- Do **not** commit keys; set env vars instead.
+- Optional scan: `gitleaks detect --redact`.
+
+## Useful scripts
+- `backend/mlflow_server.sh` – local MLflow server
+- `backend/ml/siamese_train.py` – train & log compatibility model
+- `backend/ml/preprocess.py` – image preprocessing
+- `run_pipeline.sh` – DVC pipeline wrapper
 
